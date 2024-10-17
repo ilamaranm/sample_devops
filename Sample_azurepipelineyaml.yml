@@ -90,7 +90,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '$(Build.SourcesDirectory)\junitreports\TEST-*.xml'
+      testResultsFiles: '$(Build.SourcesDirectory)\target\test-output\junitreports\TEST-*.xml'
       testRunTitle: 'JUnit Results'
       mergeTestResults: true
   displayName: 'Publish Test Results'
