@@ -1,0 +1,104 @@
+pool: 
+  vmImage: 'windows-latest'
+
+variables:
+  timezone: 'India Standard Time'  # Set this to India Standard Time
+
+steps:
+
+- checkout: self
+  displayName: 'Checkout Repository'
+
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '21'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+  displayName: 'Install JDK 21'
+
+- powershell: |
+   $chromedriverUrl = "https://storage.googleapis.com/chrome-for-testing-public/129.0.6668.71/win64/chromedriver-win64.zip"
+   Invoke-WebRequest -Uri $chromedriverUrl -OutFile chromedriver.zip
+   New-Item -ItemType Directory -Force -Path C:\webdriver
+   Expand-Archive -Path chromedriver.zip -DestinationPath C:\webdriver  
+  displayName: 'Download and Install Chromedriver'
+
+- powershell: |
+    [System.Environment]::SetEnvironmentVariable('PATH', $env:PATH + ";C:\webdriver", [System.EnvironmentVariableTarget]::Process)
+    Write-Host "##vso[task.setvariable variable=chromedriverPath]C:\webdriver"
+  displayName: 'Set Chromedriver Path'
+
+- powershell: |
+    Write-Host "Listing all files in project directory:"
+    Get-ChildItem -Recurse -Path $(System.DefaultWorkingDirectory)
+  displayName: 'List Project Files'
+
+- powershell: |
+    tzutil /s "$(timezone)"
+    $newTimeZone = tzutil /g
+    Write-Host "Time zone is set to: $newTimeZone"
+    $currentTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    Write-Host "Current Agent Time: $currentTime"
+  displayName: 'Set Timezone to India Standard Time'
+  
+- powershell: |
+      $env:SQL_CONNECTION_STRING = "jdbc:sqlserver://qcvm001.eastus.cloudapp.azure.com\\MSSQLSERVER2022;databaseName=AHI_GHB_WHMIS;encrypt=true;trustServerCertificate=true"
+      Write-Host "##vso[task.setvariable variable=SQL_CONNECTION_STRING]$env:SQL_CONNECTION_STRING"
+  displayName: 'Set SQL Server Connection String'
+
+- powershell: |
+          mvn clean compile test verify jacoco:report
+  displayName: 'Build and Run Tests with Maven and JaCoCo'
+  env:
+          SQL_CONNECTION_STRING: $(SQL_CONNECTION_STRING)
+ 
+- powershell: |
+   $jacocoExecFile = Get-ChildItem -Path $(Build.SourcesDirectory)/target/*.exec
+    if ($jacocoExecFile) {
+        Write-Host "JaCoCo exec file found: $($jacocoExecFile.FullName)"
+    } else {
+        Write-Host "JaCoCo exec file not found"
+    }
+  displayName: 'Check if jacoco.exec is generated'
+
+- powershell: |
+      New-Item -Path $(Build.SourcesDirectory)\target\test-directory -ItemType Directory
+      Set-Content -Path $(Build.SourcesDirectory)\target\test-directory\testfile.txt -Value "Test file content"
+  displayName: 'Test Write Permissions'
+  
+- powershell: |
+      Get-ChildItem -Recurse -Path $(Build.SourcesDirectory)/target
+      Get-ChildItem -Recurse -Path $(Build.SourcesDirectory)/jacoco-report
+  displayName: 'List Target and JaCoCo Report Files'
+  
+- powershell: |
+      Start-Sleep -Seconds 10
+  displayName: 'Wait for JaCoCo Report to be Generated'
+
+- script: |
+      curl -Os https://uploader.codecov.io/latest/windows/codecov.exe
+      codecov.exe -f "$(Build.SourcesDirectory)\\jacoco-report\\jacoco.xml" -t "206ae66c-40cd-4cdf-82cd-b04a2e5f179d"
+  displayName: 'Upload Coverage to Codecov'
+  condition: succeededOrFailed()
+
+- task: PublishPipelineArtifact@1
+  inputs:
+      targetPath: '$(Build.SourcesDirectory)\target\jacoco-report'
+      artifact: 'jacoco-report'
+  displayName: 'Publish JaCoCo Report as Artifact'  
+
+- task: PublishTestResults@2
+  inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '$(Build.SourcesDirectory)\junitreports\TEST-*.xml'
+      testRunTitle: 'JUnit Results'
+      mergeTestResults: true
+  displayName: 'Publish Test Results'
+
+- task: PublishCodeCoverageResults@2
+  inputs:
+    codeCoverageTool: 'JaCoCo'
+    summaryFileLocation: '$(Build.SourcesDirectory)\target\jacoco-report\jacoco.xml'  
+    mergeTestResults: true     
+  displayName: 'Publish Code Coverage Results'
+
