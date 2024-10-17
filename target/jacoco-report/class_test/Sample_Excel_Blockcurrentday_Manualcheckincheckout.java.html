@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sample_Excel_Blockcurrentday_Manualcheckincheckout.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sample_project</a> &gt; <a href="index.source.html" class="el_package">class_test</a> &gt; <span class="el_source">Sample_Excel_Blockcurrentday_Manualcheckincheckout.java</span></div><h1>Sample_Excel_Blockcurrentday_Manualcheckincheckout.java</h1><pre class="source lang-java linenums">package class_test;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+
+<span class="fc" id="L35">public class Sample_Excel_Blockcurrentday_Manualcheckincheckout extends Sampleclass_DB_utility {</span>
+	
+	private WebDriver driver;
+<span class="fc" id="L38">	private String filepath = System.getProperty(&quot;user.dir&quot;) + &quot;/src/test/resources/Appmnt_admin.xlsx&quot;;</span>
+	private String scenario;
+	private String scenario1;
+	private String state;
+	private String state1;
+	
+	
+	@Test(dataProvider=&quot;sqlQueries1&quot;,priority=1)
+	public void test(String driverpath,String Webhislink, String usr, String pas,String emrlink,String emrafilogin,String emrafipass,String emrpass) throws InterruptedException, IOException {
+
+<span class="fc" id="L48">		Sampleclass_Screenshot_utility scrnshot=new Sampleclass_Screenshot_utility();</span>
+<span class="fc" id="L49">		Sampleclass_Excel_utility exl=new Sampleclass_Excel_utility(filepath);</span>
+<span class="fc" id="L50">		int scrnshtnum=rnd.nextInt(1,100);</span>
+		
+<span class="fc" id="L52">		System.setProperty(&quot;webdriver.chrome.driver&quot;, &quot;C:\\webdriver\\chromedriver-win64\\chromedriver.exe&quot;);</span>
+<span class="fc" id="L53">		driver=new ChromeDriver();</span>
+<span class="fc" id="L54">		driver.get(Webhislink);</span>
+<span class="fc" id="L55">		driver.manage().window().maximize();</span>
+<span class="fc" id="L56">		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));</span>
+<span class="fc" id="L57">		wait=new WebDriverWait(driver,Duration.ofSeconds(20));</span>
+<span class="fc" id="L58">		js=(JavascriptExecutor)driver;</span>
+		
+<span class="fc" id="L60">		driver.findElement(By.id(&quot;txtUsrId&quot;)).sendKeys(usr);</span>
+<span class="fc" id="L61">		driver.findElement(By.id(&quot;txtUsrpwd&quot;)).sendKeys(pas);</span>
+<span class="fc" id="L62">		driver.findElement(By.id(&quot;txtLogin&quot;)).click();</span>
+<span class="fc" id="L63">		Thread.sleep(2000);</span>
+		
+<span class="fc" id="L65">		List&lt;WebElement&gt; menu=driver.findElements(By.xpath(&quot;//div[@class='input-group']//ul//li&quot;));</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">		 if (!menu.isEmpty() &amp;&amp; menu.get(locationindx).isDisplayed()) {</span>
+<span class="fc" id="L67">	            menu.get(locationindx).click();</span>
+	        }
+		try {
+<span class="fc" id="L70">			WebElement tab=driver.findElement(By.xpath(&quot;(//div[@role='tabpanel'] )[2]&quot;));</span>
+<span class="fc" id="L71">			wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(&quot;(//div[@role='tabpanel'] )[2]&quot;)));</span>
+<span class="nc" id="L72">		}catch(NoSuchElementException e) {</span>
+<span class="nc" id="L73">			 System.out.println(&quot;Exception while waiting for tab panel: &quot; + e.getMessage());</span>
+<span class="fc" id="L74">		}</span>
+<span class="fc" id="L75">		int startIndex = connect.indexOf(&quot;//&quot;);</span>
+<span class="fc" id="L76">	    int semicolonind = connect.indexOf(&quot;;&quot;, startIndex+1);</span>
+<span class="fc" id="L77">	    int	endindex=connect.indexOf(&quot;;&quot;,semicolonind+1);</span>
+	   
+<span class="fc" id="L79">	    String DBconnect = connect.substring(startIndex + 2, endindex);</span>
+<span class="fc" id="L80">		Thread.sleep(4000);</span>
+		
+<span class="fc" id="L82">		WebElement app=driver.findElement(By.id(&quot;btnappicon&quot;));</span>
+<span class="fc" id="L83">		js.executeScript(&quot;arguments[0].click()&quot;, app);</span>
+<span class="fc" id="L84">		WebElement settings=driver.findElement(By.xpath(&quot;//span[text()='Settings']&quot;));</span>
+<span class="fc" id="L85">		js.executeScript(&quot;arguments[0].click()&quot;, settings);</span>
+<span class="fc" id="L86">		WebElement adminoptions=driver.findElement(By.xpath(&quot;//span[text()='Administrator Options']&quot;));</span>
+<span class="fc" id="L87">		js.executeScript(&quot;arguments[0].click()&quot;, adminoptions);</span>
+<span class="fc" id="L88">		Thread.sleep(2000);</span>
+<span class="fc" id="L89">		WebElement other=driver.findElement(By.xpath(&quot;//label[text()='Other']&quot;));</span>
+<span class="fc" id="L90">		js.executeScript(&quot;arguments[0].click()&quot;, other);</span>
+<span class="fc" id="L91">		Thread.sleep(3000);</span>
+<span class="fc" id="L92">		WebElement blockcurrentday=driver.findElement(By.xpath(&quot;//input[@id='chkBlockCurrentDayBooking']&quot;));</span>
+<span class="fc" id="L93">		boolean isblockcurrentdayselected=blockcurrentday.isSelected();</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">		if(isblockcurrentdayselected) {</span>
+<span class="nc" id="L95">			scenario=&quot;Block Current Day Appointment&quot;;</span>
+<span class="nc" id="L96">			state=&quot;Checked&quot;;</span>
+		}
+		else {
+<span class="fc" id="L99">			scenario=&quot;Block Current Day Appointment&quot;;</span>
+<span class="fc" id="L100">			state=&quot;Unchecked&quot;;;</span>
+
+		}
+		
+<span class="fc" id="L104">		WebElement manualcheckin_checkout=driver.findElement(By.xpath(&quot;//input[@id='chkEnableManualCheckInCheckOut']&quot;));</span>
+<span class="fc" id="L105">		boolean isManualCheckinCheckoutSelected = manualcheckin_checkout.isSelected();</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">		if (isManualCheckinCheckoutSelected) {</span>
+<span class="fc" id="L107">			scenario1=&quot;Enable Manual checkin and checkout&quot;;</span>
+<span class="fc" id="L108">			state1=&quot;Checked&quot;;</span>
+		} else {
+<span class="nc" id="L110">			scenario1=&quot;Enable Manual checkin and checkout&quot;;</span>
+<span class="nc" id="L111">			state1=&quot;Unchecked&quot;;</span>
+		}
+<span class="fc" id="L113">		Thread.sleep(2000);</span>
+<span class="fc" id="L114">		driver.findElement(By.xpath(&quot;//span[@id='btnSave']&quot;)).click();</span>
+<span class="fc" id="L115">		driver.navigate().refresh();</span>
+		try {
+<span class="nc" id="L117">		    Alert alert = driver.switchTo().alert();</span>
+<span class="nc" id="L118">		    alert.accept();</span>
+<span class="fc" id="L119">		} catch (NoAlertPresentException e) {</span>
+<span class="fc" id="L120">		    System.out.println(&quot;No alert present after refresh.&quot;);</span>
+<span class="nc" id="L121">		}</span>
+		
+<span class="fc" id="L123">		WebElement app1=driver.findElement(By.id(&quot;btnappicon&quot;));</span>
+<span class="fc" id="L124">		js.executeScript(&quot;arguments[0].click()&quot;, app1);</span>
+<span class="fc" id="L125">		WebElement masters=driver.findElement(By.xpath(&quot;(//span[@id='Masters'])[2]&quot;));</span>
+<span class="fc" id="L126">		js.executeScript(&quot;arguments[0].click()&quot;, masters);</span>
+<span class="fc" id="L127">		WebElement consultants=driver.findElement(By.id(&quot;Consultants&quot;));</span>
+<span class="fc" id="L128">		js.executeScript(&quot;arguments[0].click()&quot;, consultants);</span>
+<span class="fc" id="L129">		WebElement consultan_schedule=driver.findElement(By.xpath(&quot;//span[@id='Consultant Schedule']&quot;));</span>
+<span class="fc" id="L130">		js.executeScript(&quot;arguments[0].click()&quot;, consultan_schedule);</span>
+<span class="fc" id="L131">		Thread.sleep(1000);</span>
+<span class="fc" id="L132">		WebElement consul_textbox=driver.findElement(By.xpath(&quot;(//input[@id='txtConsultant'])[1]&quot;));</span>
+<span class="fc" id="L133">		consul_textbox.sendKeys(consname);</span>
+<span class="fc" id="L134">		Thread.sleep(2000);</span>
+<span class="fc" id="L135">		List&lt;WebElement&gt; conslit=driver.findElements(By.xpath(&quot;//tbody[@id='ScrollableContent']//tr&quot;));</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">		for(WebElement con: conslit) {</span>
+<span class="fc" id="L137">			con.getText().equals(consname);</span>
+<span class="fc" id="L138">			Thread.sleep(1000);</span>
+<span class="fc" id="L139">			con.click();</span>
+<span class="fc" id="L140">		}</span>
+<span class="fc" id="L141">		Thread.sleep(2000);</span>
+<span class="fc" id="L142">		WebElement todate=driver.findElement(By.xpath(&quot;//input[@id='txtToDate']&quot;));</span>
+<span class="fc" id="L143">		todate.sendKeys(Keys.chord(Keys.CONTROL,&quot;a&quot;));</span>
+<span class="fc" id="L144">		todate.sendKeys(Keys.DELETE);</span>
+<span class="fc" id="L145">		LocalDate consdate=LocalDate.now().plusMonths(2);</span>
+<span class="fc" id="L146">		DateTimeFormatter formatter=DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</span>
+<span class="fc" id="L147">		String condate=consdate.format(formatter);</span>
+<span class="fc" id="L148">		todate.sendKeys(condate);</span>
+<span class="fc" id="L149">		Thread.sleep(2000);</span>
+<span class="fc" id="L150">		driver.findElement(By.xpath(&quot;//button[@id='btnLoad']&quot;)).click();</span>
+<span class="fc" id="L151">		Thread.sleep(1000);</span>
+<span class="fc" id="L152">		driver.findElement(By.xpath(&quot;//button[@id='btnTime']&quot;)).click();	</span>
+<span class="fc" id="L153">		Thread.sleep(2000);</span>
+<span class="fc" id="L154">		WebElement schedule1=driver.findElement(By.id(&quot;chkSheduleI&quot;));</span>
+<span class="pc bpc" id="L155" title="1 of 2 branches missed.">		if (!schedule1.isSelected()){</span>
+<span class="nc" id="L156">		schedule1.click();</span>
+		}
+<span class="fc" id="L158">		WebElement time1=driver.findElement(By.xpath(&quot;//input[@id='timfirst1']&quot;));</span>
+<span class="fc" id="L159">		time1.click();</span>
+<span class="fc" id="L160">		time1.clear();</span>
+<span class="fc" id="L161">		time1.sendKeys(&quot;08.00&quot;);</span>
+<span class="fc" id="L162">		WebElement time2=driver.findElement(By.xpath(&quot;//input[@id='timfirst2']&quot;));</span>
+<span class="fc" id="L163">		time2.click();</span>
+<span class="fc" id="L164">		time2.clear();</span>
+<span class="fc" id="L165">		time2.sendKeys(&quot;21.00&quot;);</span>
+<span class="fc" id="L166">		Thread.sleep(2000);</span>
+<span class="fc" id="L167">		WebElement schedule2=driver.findElement(By.xpath(&quot;//input[@id='chkSheduleII']&quot;));</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">		if(schedule2.isSelected()) {</span>
+<span class="nc" id="L169">			schedule2.click();</span>
+		}
+<span class="fc" id="L171">		Thread.sleep(2000);</span>
+<span class="fc" id="L172">		driver.findElement(By.xpath(&quot;//input[@id='chkSelectAll']&quot;)).click();</span>
+<span class="fc" id="L173">		Thread.sleep(2000);</span>
+<span class="fc" id="L174">		driver.findElement(By.xpath(&quot;//button[@id='btnok']&quot;)).click();</span>
+<span class="fc" id="L175">		Thread.sleep(2000);</span>
+<span class="fc" id="L176">		driver.findElement(By.xpath(&quot;//button[@id='btnSave']&quot;)).click();</span>
+<span class="fc" id="L177">		Thread.sleep(2000);</span>
+		
+<span class="fc" id="L179">		WebElement frontoffice=driver.findElement(By.id(&quot;Front Office&quot;));</span>
+<span class="fc" id="L180">		js.executeScript(&quot;arguments[0].click()&quot;, frontoffice);</span>
+<span class="fc" id="L181">		WebElement appointments=driver.findElement(By.id(&quot;Appointments&quot;));</span>
+<span class="fc" id="L182">		js.executeScript(&quot;arguments[0].click()&quot;, appointments);</span>
+<span class="fc" id="L183">		WebElement appointscheduler=driver.findElement(By.id(&quot;Appoint.Scheduler&quot;));</span>
+<span class="fc" id="L184">		js.executeScript(&quot;arguments[0].click()&quot;, appointscheduler);</span>
+<span class="fc" id="L185">		Thread.sleep(4000);</span>
+<span class="fc" id="L186">		WebElement location=driver.findElement(By.xpath(&quot;//select[@ID='ddlLocation']&quot;));</span>
+<span class="fc" id="L187">		Select sel=new Select(location);</span>
+<span class="fc" id="L188">		sel.selectByIndex(locationindx);</span>
+<span class="fc" id="L189">		WebElement selectedOption = sel.getFirstSelectedOption();</span>
+<span class="fc" id="L190">		String selectedOptionText = selectedOption.getText();</span>
+<span class="fc" id="L191">		System.out.println(&quot;Selected option text: &quot; + selectedOptionText);</span>
+<span class="fc" id="L192">		WebElement spec_search=driver.findElement(By.xpath(&quot;(//input[@id='txtSearch'])[1]&quot;));</span>
+<span class="fc" id="L193">		spec_search.click();</span>
+<span class="fc" id="L194">		spec_search.sendKeys(splname);</span>
+<span class="fc" id="L195">		driver.findElement(By.xpath(&quot;//label[text()=' &quot;+splname+&quot; ']&quot;)).click();</span>
+<span class="fc" id="L196">		Thread.sleep(2000);</span>
+		
+		try {
+<span class="fc" id="L199">		    WebElement cons_search = driver.findElement(By.xpath(&quot;(//input[@id='txtSearch'])[2]&quot;));</span>
+<span class="fc" id="L200">		    wait.until(ExpectedConditions.visibilityOf(cons_search));</span>
+<span class="fc" id="L201">		    cons_search.click();</span>
+<span class="fc" id="L202">		    cons_search.sendKeys(consname);</span>
+<span class="fc" id="L203">		    driver.findElement(By.xpath(&quot;//label[text()=' &quot;+consname+&quot; ']&quot;)).click();</span>
+<span class="nc" id="L204">		} catch (Exception e) {</span>
+<span class="nc" id="L205">		    System.out.println(&quot;cons_search element is not present in the DOM&quot;);</span>
+<span class="fc" id="L206">		}</span>
+<span class="fc" id="L207">		Thread.sleep(2000);</span>
+		
+<span class="fc" id="L209">		WebElement slottime=driver.findElement(By.xpath(&quot;//div[text()='&quot;+intervalTime2+&quot;']&quot;));</span>
+<span class="fc" id="L210">		Actions act=new Actions(driver);</span>
+<span class="fc" id="L211">		act.moveToElement(slottime).build().perform();</span>
+<span class="fc" id="L212">		act.contextClick(slottime).build().perform();</span>
+		
+<span class="fc" id="L214">		WebElement addbutton=driver.findElement(By.xpath(&quot;//li[text()='Add']&quot;));</span>
+<span class="fc" id="L215">		wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(&quot;//li[text()='Add']&quot;)));</span>
+<span class="fc" id="L216">		Thread.sleep(2000);</span>
+		
+<span class="fc" id="L218">		String screenshotPath = Sampleclass_Screenshot_utility.takeScreenshot(driver, 1);</span>
+<span class="fc" id="L219">        System.out.println(&quot;Screenshot saved at: &quot; + screenshotPath);</span>
+<span class="fc" id="L220">        BufferedImage screenshotImage = Sampleclass_Screenshot_utility.getScreenshotAsBufferedImage(driver, 2);</span>
+		String expectedresult;
+		String actualresult;
+		String status;
+		try {
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">			if(isblockcurrentdayselected) {</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">				if (addbutton.getAttribute(&quot;class&quot;).contains(&quot;e-disabled&quot;)) {</span>
+<span class="nc" id="L227">					expectedresult=&quot;Current Day appointment should be blocked&quot;;</span>
+<span class="nc" id="L228">					actualresult=&quot;Add button is disabled and current day appointment is blocked&quot;;</span>
+<span class="nc" id="L229">					status=&quot;Pass&quot;;</span>
+				}else {
+<span class="nc" id="L231">					expectedresult=&quot;Current Day appointment should be blocked&quot;;</span>
+<span class="nc" id="L232">					actualresult=&quot;Add button is not disabled and current day appointment is not blocked&quot;;</span>
+<span class="nc" id="L233">					status=&quot;Fail&quot;;</span>
+				}
+			}
+			else {
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">				 if (!addbutton.getAttribute(&quot;class&quot;).contains(&quot;e-disabled&quot;)) {</span>
+<span class="fc" id="L238">			            expectedresult = &quot;Current Day appointment should be allowed&quot;;</span>
+<span class="fc" id="L239">			            actualresult = &quot;Add button is enabled and current day appointment is allowed&quot;;</span>
+<span class="fc" id="L240">			            status = &quot;Pass&quot;;</span>
+			        } else {
+<span class="nc" id="L242">			            expectedresult = &quot;Current Day appointment should be allowed&quot;;</span>
+<span class="nc" id="L243">			            actualresult = &quot;Add button is disabled and current day appointment is blocked&quot;;</span>
+<span class="nc" id="L244">			            status = &quot;Fail&quot;;</span>
+			        }				
+			}
+<span class="fc" id="L247">			exl.addResult(scenario,state,expectedresult, actualresult, status, screenshotImage);</span>
+<span class="nc" id="L248">		}catch(Exception e){</span>
+<span class="nc" id="L249">			System.out.println(e);</span>
+<span class="fc" id="L250">		}</span>
+<span class="fc" id="L251">		List&lt;WebElement&gt; appointpopup=driver.findElements(By.xpath(&quot;//ul[@id='contextmenu_7']//li&quot;));</span>
+<span class="fc" id="L252">		System.out.println(&quot;Popup list size: &quot;+appointpopup.size());</span>
+		try {
+		    String expectedresult1;
+		    String actualresult1;
+		    String status1;
+<span class="fc" id="L257">		    boolean checkinCheckoutPresent = false;</span>
+
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">		    for (WebElement app_popup : appointpopup) {</span>
+<span class="pc bpc" id="L260" title="1 of 4 branches missed.">		        if (app_popup.getText().contains(&quot;CheckIn&quot;) || app_popup.getText().contains(&quot;CheckOut&quot;)) {</span>
+<span class="fc" id="L261">		            checkinCheckoutPresent = true;</span>
+<span class="fc" id="L262">		            break;</span>
+		        }
+<span class="fc" id="L264">		    }</span>
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">		    if (isManualCheckinCheckoutSelected) {</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">		        if (checkinCheckoutPresent) {</span>
+<span class="fc" id="L267">		            expectedresult1 = &quot;Checkin and checkout should be present in the popup when manual checkin/checkout is enabled.&quot;;</span>
+<span class="fc" id="L268">		            actualresult1 = &quot;Checkin and checkout is present in the popup.&quot;;</span>
+<span class="fc" id="L269">		            status1 = &quot;Pass&quot;;</span>
+		        } else {
+<span class="nc" id="L271">		            expectedresult1 = &quot;Checkin and checkout should be present in the popup when manual checkin/checkout is enabled.&quot;;</span>
+<span class="nc" id="L272">		            actualresult1 = &quot;Checkin and checkout is NOT present in the popup.&quot;;</span>
+<span class="nc" id="L273">		            status1 = &quot;Fail&quot;;</span>
+		        }
+		    } else {
+<span class="nc bnc" id="L276" title="All 2 branches missed.">		       	if (!checkinCheckoutPresent) {</span>
+<span class="nc" id="L277">		            expectedresult1 = &quot;Checkin and checkout should not be present in the popup when manual checkin/checkout is disabled.&quot;;</span>
+<span class="nc" id="L278">		            actualresult1 = &quot;Checkin and checkout is NOT present in the popup.&quot;;</span>
+<span class="nc" id="L279">		            status1 = &quot;Pass&quot;;</span>
+		        } else {
+<span class="nc" id="L281">		            expectedresult1 = &quot;Checkin and checkout should not be present in the popup when manual checkin/checkout is disabled.&quot;;</span>
+<span class="nc" id="L282">		            actualresult1 = &quot;Checkin and checkout is present in the popup.&quot;;</span>
+<span class="nc" id="L283">		            status1 = &quot;Fail&quot;;</span>
+		        }
+		    }
+<span class="fc" id="L286">		    exl.addResult(scenario1,state1,expectedresult1, actualresult1, status1, screenshotImage);</span>
+
+<span class="nc" id="L288">		} catch (Exception e) {</span>
+<span class="nc" id="L289">		    System.out.println(&quot;An error occurred: &quot; + e.getMessage());</span>
+<span class="fc" id="L290">		}</span>
+<span class="fc" id="L291">		exl.save(filepath);</span>
+	
+<span class="fc" id="L293">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
