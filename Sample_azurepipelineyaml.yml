@@ -47,7 +47,7 @@ steps:
   displayName: 'Set SQL Server Connection String'
 
 - powershell: |
-          mvn clean compile test verify jacoco:report
+          mvn clean compile test 
   displayName: 'Build and Run Tests with Maven and JaCoCo'
   env:
           SQL_CONNECTION_STRING: $(SQL_CONNECTION_STRING)
@@ -81,12 +81,6 @@ steps:
   displayName: 'Upload Coverage to Codecov'
   condition: succeededOrFailed()
 
-- task: PublishPipelineArtifact@1
-  inputs:
-      targetPath: '$(Build.SourcesDirectory)\target\jacoco-report'
-      artifact: 'jacoco-report'
-  displayName: 'Publish JaCoCo Report as Artifact'  
-
 - task: PublishTestResults@2
   inputs:
       testResultsFormat: 'JUnit'
@@ -98,7 +92,15 @@ steps:
 - task: PublishCodeCoverageResults@2
   inputs:
     codeCoverageTool: 'JaCoCo'
-    summaryFileLocation: '$(Build.SourcesDirectory)\target\jacoco-report\jacoco.xml'  
+    summaryFileLocation: '$(Build.SourcesDirectory)\target\jacoco-report\jacoco.xml' 
+    reportDirectory: '$(Build.SourcesDirectory)/target/site/jacoco' 
     mergeTestResults: true     
   displayName: 'Publish Code Coverage Results'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+        targetPath: '$(Build.SourcesDirectory)\target\jacoco-report'
+        artifact: 'jacoco-report'
+  displayName: 'Publish JaCoCo Report as Artifact'  
+
 
